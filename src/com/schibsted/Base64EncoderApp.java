@@ -5,6 +5,7 @@ import com.googlecode.utterlyidle.RestApplication;
 import com.googlecode.utterlyidle.ServerConfiguration;
 import com.googlecode.utterlyidle.httpserver.RestServer;
 import com.googlecode.utterlyidle.modules.Module;
+import com.schibsted.base64.Base64Module;
 import com.schibsted.status.StatusModule;
 import java.net.URL;
 
@@ -20,6 +21,7 @@ public class Base64EncoderApp extends RestApplication {
     public Base64EncoderApp(BasePath basePath) {
         super(basePath);
         add(new StatusModule());
+        add(new Base64Module());
 
         add(staticFilesModule(Base64EncoderApp.class, "static/", ""));
     }
