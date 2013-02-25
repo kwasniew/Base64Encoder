@@ -21,9 +21,28 @@ public class Base64Resource {
     @POST
     @Path("encoding")
     public Response encode(@FormParam("source") String source) throws Exception {
+        Response response = clientHttpHandler.handle(RequestBuilder.get(source).accepting("*/*").build());
+        byte[] imageAsBytes = response.entity().asBytes();
+        byte[] base64 = Base64.encodeBase64(imageAsBytes);
+        if(!response.status().equals(Status.OK)) {
+            return ResponseBuilder.modify(response).header("Access-Control-Allow-Origin", "*").build();
+        }
+        String prefix = "data:"+response.headers().getValue("Content-Type")+";charset=UTF-8;base64,";
+        return ResponseBuilder.response(Status.OK).header("Access-Control-Allow-Origin", "*").entity(prefix + new String(base64)).build();
+    }
+
+    @POST
+    @Path("asyncEncoding")
+    public Response encodeAsynchronously(@FormParam("source") String source) throws Exception {
         Response response = clientHttpHandler.handle(RequestBuilder.get(source).build());
         byte[] imageAsBytes = response.entity().asBytes();
         byte[] base64 = Base64.encodeBase64(imageAsBytes);
-        return ResponseBuilder.response(Status.OK).header("Access-Control-Allow-Origin", "*").entity(new String(base64)).build();
+
+        // data:text/csv;charset=UTF-8,
+        String prefix = "data:"+response.headers().getValue("Content-Type")+";charset=UTF-8,";
+
+        return ResponseBuilder.response(Status.OK).
+                header("Access-Control-Allow-Origin", "*").
+                entity(prefix + new String(base64)).build();
     }
 }

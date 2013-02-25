@@ -4,6 +4,8 @@
 build/artifacts
 target
 out
+src/build.number
+src/git.commit
 
 # Intellij Files #
 *.iws

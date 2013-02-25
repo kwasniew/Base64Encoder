@@ -42,7 +42,7 @@ public class Base64EncoderApp extends RestApplication {
         int port = readPort(args);
 
         new RestServer(new Base64EncoderApp(BasePath.basePath("")),
-                       ServerConfiguration.defaultConfiguration().port(port));
+                       ServerConfiguration.defaultConfiguration().port(port).maxThreadNumber(10));
     }
 
     private static int readPort(String[] args) {
